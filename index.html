@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Monitoring</title>
+  <link rel="stylesheet" href="style.css">
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+  integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+  />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    function updateDashboard() {
+      $.get("dashboard.php", function(data) {
+        let response = JSON.parse(data);
+
+                // Update table content dynamically using the data
+                $("#articles_A").html(response.articles_A);
+                $("#articles_B").html(response.articles_B);
+                $("#q_table").html(response.q_table);
+                $("#total_views").html(response.total_views);
+
+                addProgressBarListeners();
+              });
+    }
+        // Call updateDashboard every 5 seconds to refresh the data
+        setInterval(updateDashboard, 1);
+
+        // Load initial data when the page loads
+        $(document).ready(function() {
+          updateDashboard();
+        });
+      </script>
+    </head>
+
+    <body>
+      <header><div class="head"><h2>Dinamic Shard RL</h2></div></header>
+
+      <main>
+        <div class="left">
+          <div class="card">
+           <h3><i class="fas fa-th-list"></i>&nbsp;Warehouse A</h3><hr>
+           <div class="card-body">
+             <table>
+              <thead>
+                <tr>
+                  <th style="width: 5%" class="radl">Id</th>
+                  <th style="width: 60%">Title</th>
+                  <th style="width: 20%">Trend</th>
+                  <th style="width: 15%" class="radr">Modified</th>
+                </tr>
+              </thead>
+              <tbody id="articles_A">
+              </tbody>
+            </table>
+          </div>
+          <hr class="hr-bottom">
+          <span id="total_views"></span>
+
+        </div>
+      </div>
+
+      <div class="center">
+        <div class="card">
+         <h3><i class="fas fa-th-list"></i>&nbsp;Warehouse B</h3><hr>
+         <div class="card-body">
+           <table>
+            <thead>
+              <tr>
+                <th style="width: 5%">Id</th>
+                <th style="width: 60%">Title</th>
+                <th style="width: 20%">Trend</th>
+                <th style="width: 15%">Modified</th>
+              </tr>
+            </thead>
+            <tbody id="articles_B">
+            </tbody>
+          </table>
+        </div>
+        <hr class="hr-bottom">&nbsp;
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="card">
+        <h3><i class="fas fa-th-list"></i>&nbsp;Q-Table</h3><hr>
+        <div class="card-body">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 20%">State</th>
+                <th style="width: 20%">A0</th>
+                <th style="width: 20%">A1</th>
+                <th style="width: 20%">A2</th>
+                <th style="width: 20%">Total</th>
+              </tr>
+            </thead>
+            <tbody id="q_table">
+            </tbody>
+          </table>
+        </div>
+        <hr class="hr-bottom">&nbsp;
+      </div>
+    </div>
+  </main>
+
+  <script type="text/javascript">
+    function addProgressBarListeners() {
+      document.querySelectorAll('progress').forEach(function(progressBar) {
+        function updateProgressBar() {
+          var value = progressBar.value;
+          var max = progressBar.max;
+
+          if (value >= max) {
+            progressBar.classList.add('full');
+          } else {
+            progressBar.classList.remove('full');
+          }
+        }
+
+    // Pastikan tidak menambahkan event listener duplikat
+    progressBar.removeEventListener('input', updateProgressBar);
+    progressBar.addEventListener('input', updateProgressBar);
+
+    // Panggil fungsi saat elemen progressBar dimuat
+    updateProgressBar();
+  });
+    }
+
+  </script>
+
+</body>
+</html>
